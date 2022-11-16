@@ -1,11 +1,10 @@
 import chalk from 'chalk'
 import axios from 'axios'
-import prompt from 'prompt';
 import UserAgent from 'user-agents';
-prompt.start();
+import config from '../config.json';
 
 function GetFaucet(walletAddress: string){
-    console.log("Claiming SUI 0.50000000 ...");
+    console.log(`Wallet Address: ${walletAddress}\nClaiming SUI 0.05000000 ...`);
     const userAgent = new UserAgent().toString();
 
     const config: any = {
@@ -21,7 +20,7 @@ function GetFaucet(walletAddress: string){
     }
 
     axios(config)
-        .then((res) => console.log(chalk.greenBright(`Success claim SUI 0.50000000 to address ${walletAddress}`)))
+        .then((res) => console.log(chalk.greenBright(`Success claim SUI 0.05000000 -> ${walletAddress}`)))
         .catch((err) => {
             console.log(err.cause);
 
@@ -31,7 +30,7 @@ function GetFaucet(walletAddress: string){
     
                 switch(errorCode){
                     case 'ECONNRESET':
-                        console.log(chalk.redBright('Target is closed the connection. Check your proxy!'));
+                        console.log(chalk.redBright('Target is closed the connection. Check your internet connection/proxy!'));
                         break;
 
                     case 'ETIMEDOUT':
@@ -47,7 +46,4 @@ function GetFaucet(walletAddress: string){
         })
 }
 
-prompt.get(['wallet_address'], (err: any, result: any) => {
-    if(err) throw new Error();
-    GetFaucet(result.wallet_address);
-})
+GetFaucet(config.wallet_address);
